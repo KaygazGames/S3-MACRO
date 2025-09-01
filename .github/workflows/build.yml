@@ -1,10 +1,9 @@
-name: ESP-IDF Build
+name: Build ESP32 Project
 
 on:
   push:
     branches: [ main ]
   pull_request:
-    branches: [ main ]
 
 jobs:
   build:
@@ -12,16 +11,21 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      - name: Set up ESP-IDF
-        uses: espressif/setup-espidf@v2
+      # Python setup
+      - uses: actions/setup-python@v4
         with:
-          version: 'v6.0'
+          python-version: 3.11
 
-      - name: Build project
-        run: idf.py build
-
-      - name: Upload firmware artifact
-        uses: actions/upload-artifact@v3
+      # ESP-IDF setup
+      - uses: esp-rs/setup-espidf@v2
         with:
-          name: firmware
+          version: 'v6.0' # son ESP-IDF sürümü
+
+      # Build
+      - run: idf.py build
+
+      # Upload artifacts
+      - uses: actions/upload-artifact@v4
+        with:
+          name: build
           path: build/
