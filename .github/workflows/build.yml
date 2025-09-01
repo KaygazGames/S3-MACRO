@@ -21,7 +21,7 @@ jobs:
         with:
           esp_idf_version: v5.2
           target: esp32s3
-          path: 'path/to/your/project'
+          path: '.'
 
       - name: Build project
         run: idf.py build
