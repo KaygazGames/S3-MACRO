@@ -1,27 +1,27 @@
-name: Build ESP32 Project
+name: ESP32-S3 Build
 
 on:
   push:
     branches:
       - main
   pull_request:
-    branches:
-      - main
 
 jobs:
   build:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
+    - name: Checkout repository
+      uses: actions/checkout@v3
 
-      - name: Set up ESP-IDF
-        uses: espressif/esp-idf-ci-action@v1
-        with:
-          esp_idf_version: v5.2
-          target: esp32s3
-          path: '.'
+    - name: Setup ESP-IDF
+      uses: espressif/setup-esp-idf-action@v2
+      with:
+        version: v6.0
 
-      - name: Build project
-        run: idf.py build
+    - name: Install Python dependencies
+      run: python -m pip install --upgrade pip
+
+    - name: Build project
+      run: idf.py build
+      working-directory: S3-MACRO
