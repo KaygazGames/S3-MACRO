@@ -1,29 +1,23 @@
-name: ESP32 IDF Build via Docker
+name: ESP32 USB Mouse to BT Build
 
 on:
   push:
-    branches: [ main ]
+    branches: [ "main" ]
   pull_request:
-    branches: [ main ]
+    branches: [ "main" ]
 
 jobs:
   build:
     runs-on: ubuntu-latest
+
     steps:
-      - uses: actions/checkout@v4
+    - name: Checkout repository
+      uses: actions/checkout@v3
 
-      - name: Build with ESP-IDF (Docker)
-        uses: espressif/esp-idf-ci-action@v1
-        with:
-          esp_idf_version: latest        # ya da v6.0, v5.2 gibi tag
-          target: esp32s3                # hedef board (esp32, esp32s3 vs.)
-          path: .                        # proje kökü
+    - name: Setup ESP-IDF
+      uses: espressif/setup-idf@v1
+      with:
+        version: v5.2
 
-      - name: Upload Firmware Artifacts
-        uses: actions/upload-artifact@v4
-        with:
-          name: firmware
-          path: |
-            build/*.bin
-            build/bootloader/bootloader.bin
-            build/partition_table/partition-table.bin
+    - name: Build project
+      run: idf.py build
