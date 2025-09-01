@@ -2,9 +2,9 @@ name: ESP32 Build
 
 on:
   push:
-    branches: [ "main" ]
+    branches: [ main ]
   pull_request:
-    branches: [ "main" ]
+    branches: [ main ]
 
 jobs:
   build:
@@ -17,13 +17,7 @@ jobs:
     - name: Set up ESP-IDF
       uses: espressif/setup-esp-idf@v1
       with:
-        version: v5.2  # Burada ESP-IDF versiyonunu seçiyorsun (örn: v5.2, v5.1, v4.4)
+        version: v5.1
 
     - name: Build project
       run: idf.py build
-
-    - name: Upload firmware
-      uses: actions/upload-artifact@v4
-      with:
-        name: firmware
-        path: build/*.bin
