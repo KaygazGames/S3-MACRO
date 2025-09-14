@@ -1,9 +1,9 @@
-name: ESP32-S3 HID Mouse Build
+name: Build & Release ESP32-S3 HID Mouse
 
 on:
   push:
     tags:
-      - 'v*'   # Run only when you push a tag like v1.0.0
+      - 'v*'   # runs when you push tags like v1.0.0
 
 jobs:
   build:
