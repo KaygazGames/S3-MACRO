@@ -1,39 +1,25 @@
-name: Build & Release ESP32-S3 HID Mouse c
+name: ESP32 Build
 
-on:
-  push:
-    tags:
-      - 'v*'   # runs when you push tags like v1.0.0
+on: [push]
 
 jobs:
   build:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v4
+      - name: Checkout
+        uses: actions/checkout@v4
 
-    - name: Build with ESP-IDF CI Action
-      uses: espressif/esp-idf-ci-action@v1
-      with:
-        esp_idf_version: "v5.2"
-        target: esp32s3
-        path: "."
+      - name: Set up ESP-IDF
+        uses: espressif/setup-esp-idf@v1
+        with:
+          version: v5.3
 
-    - name: Package firmware
-      run: |
-        mkdir -p release
-        cp build/bootloader/bootloader.bin release/
-        cp build/partition_table/partition-table.bin release/
-        cp build/*.bin release/
-        cp build/flash_args release/
-        echo "esptool.py --chip esp32s3 -p PORT -b 460800 write_flash @flash_args" > release/flash.sh
-        chmod +x release/flash.sh
-        zip -r esp32s3-hid-mouse-${GITHUB_REF_NAME}.zip release
+      - name: Build firmware
+        run: idf.py build
 
-    - name: Create GitHub Release
-      uses: softprops/action-gh-release@v2
-      with:
-        files: esp32s3-hid-mouse-${GITHUB_REF_NAME}.zip
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: firmware
+          path: build/*.{bin,elf}
