@@ -1,4 +1,4 @@
-name: Build & Release ESP32-S3 HID Mouse
+name: Build & Release ESP32-S3 HID Mouse c
 
 on:
   push:
