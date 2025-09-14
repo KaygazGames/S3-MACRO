@@ -1,24 +1,28 @@
-name: ESP32 Build
+name: ESP32 Build Every Push
 
-on: [push]
+on:
+  push:
 
 jobs:
   build:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout
+      - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Set up ESP-IDF
-        uses: espressif/setup-esp-idf@v1
+      - name: Install ESP-IDF
+        uses: espressif/install-esp-idf-action@v1
         with:
-          version: v5.3
+          version: "v5.2"   # or whatever ESP-IDF version you want
+
+      - name: Set project target
+        run: idf.py set-target esp32s3
 
       - name: Build firmware
         run: idf.py build
 
-      - name: Upload build artifacts
+      - name: Upload artifacts
         uses: actions/upload-artifact@v4
         with:
           name: firmware
